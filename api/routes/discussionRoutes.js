@@ -7,6 +7,7 @@ const auth = require('../middleware/auth');
 
 const upload = multer({ dest: 'uploads/' });
 
+
 // Create Discussion
 router.post('/create', auth, upload.single('image'), async (req, res) => {
   try {
@@ -22,7 +23,6 @@ router.post('/create', auth, upload.single('image'), async (req, res) => {
     res.status(400).send(err);
   }
 });
-
 
 // Like Discussion
 router.post('/like/:id', auth, async (req, res) => {
@@ -104,9 +104,19 @@ router.delete('/delete/:id', async (req, res) => {
 // Get list of discussions based on tags
 router.get('/tags', async (req, res) => {
   try {
-    const discussions = await Discussion.find({ hashtags: { $in: req.query.tags.split(',') } });
+    if (!req.query.hashtags) {
+      return res.status(400).send({ error: 'Hashtags query parameter is required' });
+    }
+
+    // Split the hashtags query parameter into an array
+    const tags = req.query.hashtags.split(',').map(tag => tag.trim());
+
+    // Find discussions that have any of the provided hashtags
+    const discussions = await Discussion.find({ hashtags: { $in: tags } });
+
     res.send(discussions);
   } catch (err) {
+    console.error('Error fetching discussions:', err);
     res.status(500).send(err);
   }
 });
