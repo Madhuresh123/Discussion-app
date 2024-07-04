@@ -1,0 +1,62 @@
+1. User Model (models/user.js)
+Description: Represents a user in the system.
+Fields:
+name: String, required.
+mobile: String, unique, required.
+email: String, unique, required.
+password: String, required (hashed).
+followers: Array of ObjectIds referencing other users.
+following: Array of ObjectIds referencing other users.
+Methods:
+comparePassword: Compares a given password with the stored hashed password.
+
+
+2. Discussion Model (models/discussion.js)
+Description: Represents a discussion post in the system.
+Fields:
+user: ObjectId referencing the user who created the discussion.
+text: String, required.
+image: String, optional.
+hashtags: Array of strings.
+createdOn: Date, default to the current date.
+comments: Array of comments (each comment contains a user reference, text, likes, and replies).
+likes: Array of ObjectIds referencing users who liked the discussion.
+views: Number, default to 0.
+
+
+3. Authentication Middleware (middleware/auth.js)
+Description: Middleware for authenticating users using JWT.
+Methods:
+auth: Verifies the JWT and attaches the user to the request object.
+
+
+4. User Routes (routes/userRoutes.js)
+Description: Handles user-related operations.
+Endpoints:
+POST /signup: Creates a new user and returns a JWT.
+POST /login: Authenticates a user and returns a JWT.
+GET /search: Searches for users based on name.
+POST /follow/:id: Follows another user.
+
+
+5. Discussion Routes (routes/discussionRoutes.js)
+Description: Handles discussion-related operations.
+Endpoints:
+POST /create: Creates a new discussion.
+POST /like/:id: Likes a discussion.
+POST /comment/:id: Adds a comment to a discussion.
+POST /comment/like/:discussionId/:commentId: Likes a comment.
+GET /tags: Retrieves discussions based on hashtags.
+GET /search: Searches for discussions based on text.
+
+
+6. Main Application (app.js)
+Description: Entry point of the application.
+Responsibilities:
+Connects to MongoDB.
+Sets up middleware.
+Defines routes for user and discussion operations.
+Starts the server.
+
+7. Configuration (config.js)
+Description: Stores configuration settings such as MongoDB connection string and JWT secret key.

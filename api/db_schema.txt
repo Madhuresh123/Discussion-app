@@ -1,0 +1,36 @@
+Database Schema
+Collections and Relationships
+
+1. Users Collection
+Collection Name: users
+Fields:
+_id: ObjectId (Primary Key)
+name: String (Required)
+mobile: String (Unique, Required)
+email: String (Unique, Required)
+password: String (Hashed, Required)
+followers: Array of ObjectIds referencing users
+following: Array of ObjectIds referencing users
+
+2. Discussions Collection
+Collection Name: discussions
+Fields:
+_id: ObjectId (Primary Key)
+user: ObjectId referencing users (Required)
+text: String (Required)
+image: String (Optional)
+hashtags: Array of Strings
+createdOn: Date (Default to the current date)
+comments: Array of Subdocuments
+Subdocument Fields:
+_id: ObjectId (Primary Key)
+user: ObjectId referencing users (Required)
+text: String (Required)
+likes: Array of ObjectIds referencing users
+replies: Array of Subdocuments
+Subdocument Fields:
+_id: ObjectId (Primary Key)
+user: ObjectId referencing users (Required)
+text: String (Required)
+likes: Array of ObjectIds referencing users
+views: Number (Default to 0)
